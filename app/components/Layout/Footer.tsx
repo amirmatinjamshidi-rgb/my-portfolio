@@ -13,6 +13,7 @@ export default function Footer() {
         icon: <Copy size={16} className="text-emerald-500" />,
         toastId: "copy-phone",
       });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       toast.error("Failed to copy.");
     }
