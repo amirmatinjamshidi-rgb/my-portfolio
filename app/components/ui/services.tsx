@@ -1,61 +1,53 @@
-/** @format */
-
 "use client";
 import { motion } from "framer-motion";
-import Image from "next/image";
+import { Code2, Cpu, Layout, Layers } from "lucide-react";
 
 const myServices = [
   {
     id: 1,
     name: "Web Development",
-    image: "/next.svg",
-    desc: "Building high-performance, scalable web applications with Next.js.",
+    icon: Code2,
+    desc: "Building high-performance, scalable web applications with Next.js and modern stacks.",
   },
   {
     id: 2,
     name: "Systems Engineering",
-    image: "/next.svg",
-    desc: "Low-level performance optimization using C++ and Rust.",
+    icon: Cpu,
+    desc: "Low-level performance optimization and robust logic using C++ and Rust.",
   },
   {
     id: 3,
     name: "UI/UX Design",
-    image: "/next.svg",
-    desc: "Crafting intuitive user journeys and stunning visual interfaces.",
+    icon: Layout,
+    desc: "Crafting intuitive user journeys and stunning visual interfaces that convert.",
   },
   {
     id: 4,
     name: "Architecture",
-    image: "/next.svg",
-    desc: "Bridging on-chain and off-chain systems with reliable logic.",
+    icon: Layers,
+    desc: "Designing reliable system architectures bridging frontend and backend seamlessly.",
   },
 ];
 
 export default function Services() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-6 lg:px-20">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-6 lg:px-20">
       {myServices.map((service, index) => (
         <motion.div
           key={service.id}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}
-          whileHover={{ y: -5 }}
-          className="group relative p-8 rounded-3xl bg-linear-to-br from-[#1b3a4b] to-[#212f45] border border-white/5 hover:border-[#006466]/50 transition-all duration-500 shadow-xl"
+          whileHover={{ y: -8 }}
+          viewport={{ once: true }}
+          className="group p-8 rounded-4xl bg-linear-to-b from-white/3 to-transparent border border-white/5 hover:border-emerald-500/30 transition-all duration-500 shadow-xl"
         >
-          <div className="mb-6 bg-[#006466]/20 w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-            <Image
-              src={service.image}
-              alt={service.name}
-              height={32}
-              width={32}
-              priority
-              fetchPriority="high"
-              loading="eager"
-              className="brightness-200 w-6 h-6 md:w-9 md:h-9 object-cover"
-            />
+          <div className="mb-6 bg-emerald-500/10 w-14 h-14 rounded-2xl flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-[#010206] transition-all duration-300">
+            <service.icon size={28} strokeWidth={1.5} />
           </div>
-          <h3 className="text-xl font-bold text-white mb-3">{service.name}</h3>
+          <h3 className="text-xl font-bold text-white mb-3 tracking-tight">
+            {service.name}
+          </h3>
           <p className="text-slate-400 text-sm leading-relaxed">
             {service.desc}
           </p>

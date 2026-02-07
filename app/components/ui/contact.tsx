@@ -1,19 +1,15 @@
-/** @format */
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { Mail, MapPin, Send, Loader2 } from "lucide-react";
 
 interface ContactFormData {
   name: string;
   email: string;
   message: string;
-}
-
-interface ContactDetailProps {
-  icon: string;
-  label: string;
 }
 
 export default function Contact() {
@@ -26,17 +22,11 @@ export default function Contact() {
 
   const onSubmit = async (data: ContactFormData) => {
     try {
-      const response = await axios.post("/api/contact", data);
-
-      if (response.status === 200) {
-        alert("Message sent successfully!");
-        reset();
-      }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await axios.post("/api/contact", data);
+      alert("Message transmitted successfully.");
+      reset();
     } catch (err: any) {
-      const errorMessage = err.response?.data?.error || "Something went wrong";
-      console.error("Submission failed:", errorMessage);
-      alert(`Error: ${errorMessage}`);
+      alert(`Error: ${err.response?.data?.error || "Connection failed"}`);
     }
   };
 
@@ -45,38 +35,37 @@ export default function Contact() {
       <motion.div
         initial={{ opacity: 0, x: -30 }}
         whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
         className="lg:w-1/3 space-y-6"
       >
         <h2 className="text-5xl font-black text-white tracking-tighter italic">
           Let&apos;s{" "}
-          <span className="text-[#4d194d] brightness-200">Connect</span>
+          <span className="text-purple-glowow purple-glow">Connect</span>
         </h2>
-        <p className="text-slate-300 leading-relaxed text-lg">
+        <p className="text-slate-400 leading-relaxed text-lg">
           Building high-performance systems requires a bridge between ideas and
           execution. Reach out to start the process.
         </p>
+
         <div className="space-y-6 pt-6 border-l-2 border-[#4d194d] pl-6">
-          <ContactDetail icon="email.png" label="amirmatinjamshidi@gmail.com" />
-          <ContactDetail icon="Link.png" label="Tehran, Iran" />
+          <ContactDetail Icon={Mail} label="amirmatinjamshidi@gmail.com" />
+          <ContactDetail Icon={MapPin} label="Tehran, Iran" />
         </div>
       </motion.div>
 
       <motion.form
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
         onSubmit={handleSubmit(onSubmit)}
-        className="flex-1 w-full space-y-5 bg-[#3e1f47]/20 p-8 md:p-12 rounded-4xl border border-[#4d194d]/40 backdrop-blur-xl shadow-[0_20px_50px_rgba(77,25,77,0.3)]"
+        className="flex-1 w-full space-y-5 bg-[#1b3a4b]/20 p-8 md:p-12 rounded-4xl border border-white/5 backdrop-blur-xl shadow-2xl"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <input
-              {...register("name", { required: "Your name is essential" })}
+              {...register("name", { required: "Name is required" })}
               placeholder="Full Name"
-              className={`bg-[#1b3a4b]/30 border ${
-                errors.name
-                  ? "border-pink-500 shadow-[0_0_10px_#ec4899]"
-                  : "border-white/10"
-              } p-4 rounded-2xl outline-none focus:border-[#4d194d] text-white w-full transition-all duration-300`}
+              className={`bg-dark-bg/50 border ${errors.name ? "border-pink-500" : "border-white/10"} p-4 rounded-2xl outline-none focus:border-[#006466] text-white w-full transition-all`}
             />
             <ErrorMessage message={errors.name?.message} />
           </div>
@@ -85,17 +74,10 @@ export default function Contact() {
             <input
               {...register("email", {
                 required: "Email is required",
-                pattern: {
-                  value: /^\S+@\S+$/i,
-                  message: "Enter a valid email address",
-                },
+                pattern: { value: /^\S+@\S+$/i, message: "Invalid email" },
               })}
               placeholder="Email Address"
-              className={`bg-[#1b3a4b]/30 border ${
-                errors.email
-                  ? "border-pink-500 shadow-[0_0_10px_#ec4899]"
-                  : "border-white/10"
-              } p-4 rounded-2xl outline-none focus:border-[#4d194d] text-white w-full transition-all duration-300`}
+              className={`bg-dark-bg/50 border ${errors.email ? "border-pink-500" : "border-white/10"} p-4 rounded-2xl outline-none focus:border-[#006466] text-white w-full transition-all`}
             />
             <ErrorMessage message={errors.email?.message} />
           </div>
@@ -103,53 +85,24 @@ export default function Contact() {
 
         <div className="space-y-2">
           <textarea
-            {...register("message", {
-              required: "Please leave a short message",
-            })}
-            placeholder="Tell me about your project..."
+            {...register("message", { required: "Message is required" })}
+            placeholder="Project details..."
             rows={5}
-            className={`bg-[#1b3a4b]/30 border ${
-              errors.message
-                ? "border-pink-500 shadow-[0_0_10px_#ec4899]"
-                : "border-white/10"
-            } p-4 rounded-2xl outline-none focus:border-[#4d194d] text-white w-full resize-none transition-all duration-300`}
+            className={`bg-dark-bg/50 border ${errors.message ? "border-pink-500" : "border-white/10"} p-4 rounded-2xl outline-none focus:border-[#006466] text-white w-full resize-none transition-all`}
           />
           <ErrorMessage message={errors.message?.message} />
         </div>
 
         <button
           disabled={isSubmitting}
-          className="
-    relative overflow-hidden group w-full py-5 
-    bg-[#312244] text-white font-black rounded-2xl 
-    shadow-xl shadow-[#4d194d]/40 transition-all duration-300
-    disabled:opacity-50 uppercase tracking-widest text-sm
-  "
+          className="relative w-full py-5 bg-[#006466] hover:bg-[#00b4d8] text-white font-black rounded-2xl transition-all disabled:opacity-50 uppercase tracking-widest text-sm shadow-lg shadow-[#006466]/20 flex items-center justify-center gap-2"
         >
-          <div
-            className="
-    absolute inset-0 bg-linear-to-r from-[#4d194d] to-[#3e1f47] 
-    opacity-100 group-hover:opacity-0 transition-opacity duration-500 ease-in-out
-  "
-          />
-
-          <div
-            className="
-    absolute inset-0 bg-linear-to-r from-[#3e1f47] to-[#4d194d] 
-    opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out
-  "
-          />
-
-          <span className="relative z-10 flex items-center justify-center gap-2">
-            {isSubmitting ? (
-              <>
-                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Processing...
-              </>
-            ) : (
-              "Transmit Message"
-            )}
-          </span>
+          {isSubmitting ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Send className="w-4 h-4" />
+          )}
+          {isSubmitting ? "Transmitting..." : "Send Message"}
         </button>
       </motion.form>
     </div>
@@ -161,25 +114,25 @@ function ErrorMessage({ message }: { message?: string }) {
     <AnimatePresence>
       {message && (
         <motion.p
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          className="text-pink-400 text-xs font-bold tracking-wide pl-2"
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          className="text-pink-400 text-xs font-bold pl-2"
         >
-          ● {message}
+          {message}
         </motion.p>
       )}
     </AnimatePresence>
   );
 }
 
-function ContactDetail({ icon, label }: ContactDetailProps) {
+function ContactDetail({ Icon, label }: { Icon: any; label: string }) {
   return (
     <div className="flex items-center gap-4 text-slate-300 group">
-      <div className="w-12 h-12 rounded-2xl bg-[#4d194d]/30 flex items-center justify-center text-[#4d194d] brightness-200 group-hover:scale-110 transition-all border border-[#4d194d]/20">
-        <i className={`fa-solid fa-${icon}`} />
+      <div className="w-12 h-12 rounded-2xl bg-[#006466]/20 flex items-center justify-center text-[#006466] group-hover:bg-[#006466] group-hover:text-white transition-all border border-[#006466]/20">
+        <Icon size={20} strokeWidth={2.5} />
       </div>
-      <span className="text-sm font-semibold tracking-tight">{label}</span>
+      <span className="text-sm font-semibold">{label}</span>
     </div>
   );
 }

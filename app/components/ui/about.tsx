@@ -1,9 +1,8 @@
-/** @format */
-
 "use client";
+
 import { motion } from "framer-motion";
 
-const stackGroups = [
+const STACK_GROUPS = [
   {
     category: "Languages & Core",
     skills: ["JavaScript (ES6+)", "TypeScript", "HTML5", "CSS3/SCSS"],
@@ -12,7 +11,7 @@ const stackGroups = [
   },
   {
     category: "Frameworks & Library",
-    skills: ["Next.js 16", "React.js", "Three.js", "GSAP"],
+    skills: ["Next.js 15", "React.js", "Three.js", "GSAP"],
     gradient: "from-[#0b525b] to-[#00ffe0]",
     delay: 0.2,
   },
@@ -33,18 +32,18 @@ const stackGroups = [
 export default function TechStack() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
-      {stackGroups.map((group) => (
+      {STACK_GROUPS.map((group) => (
         <motion.div
           key={group.category}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: group.delay }}
           viewport={{ once: true }}
-          className="group relative p-px rounded-3xl bg-linear-to-br from-white/10  hover:from-[#006466] transition-all duration-500"
+          className="group relative p-px rounded-3xl bg-linear-to-br from-white/10 hover:from-[#006466] transition-all duration-500"
         >
           <div className="relative bg-[#1b3a4b]/90 backdrop-blur-xl p-8 rounded-[1.4rem] h-full space-y-6">
             <h3
-              className={`text-xs font-black uppercase tracking-[0.4em] bg-clip-text  bg-linear-to-r ${group.gradient} animate-glow`}
+              className={`text-xs font-black uppercase tracking-[0.4em] bg-clip-text bg-linear-to-r ${group.gradient}`}
             >
               {group.category}
             </h3>
