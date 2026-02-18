@@ -6,8 +6,8 @@ export default function Magnetic({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const { clientX, clientY } = e;
+  const handleMouseMove = (element: React.MouseEvent) => {
+    const { clientX, clientY } = element;
     const { width, height, left, top } = ref.current!.getBoundingClientRect();
 
     const x = (clientX - (left + width / 2)) * 0.3;

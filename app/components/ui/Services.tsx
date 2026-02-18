@@ -11,15 +11,15 @@ const myServices = [
   },
   {
     id: 2,
-    name: "Systems Engineering",
+    name: "Design Patterns",
     icon: Cpu,
-    desc: "Low-level performance optimization and robust logic using C++ and Rust.",
+    desc: "Designing scalable design patterns to create the best user experience.",
   },
   {
     id: 3,
-    name: "UI/UX Design",
+    name: "UI/UX Co-operation",
     icon: Layout,
-    desc: "Crafting intuitive user journeys and stunning visual interfaces that convert.",
+    desc: "Co-operation with UI/UX designers to create the best pixel perfect user experience.",
   },
   {
     id: 4,

@@ -1,10 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import { Mail, MapPin, Send, Loader2 } from "lucide-react";
+import axios, { AxiosError } from "axios";
+import { Mail, MapPin, Send, Loader2, CheckCircle2 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { toast } from "react-toastify";
 
 interface ContactFormData {
   name: string;
@@ -23,10 +24,15 @@ export default function Contact() {
   const onSubmit = async (data: ContactFormData) => {
     try {
       await axios.post("/api/contact", data);
-      alert("Message transmitted successfully.");
+      toast.success("Message transmitted successfully.", {
+        icon: <CheckCircle2 size={16} className="text-emerald-500" />,
+      });
       reset();
-    } catch (err: any) {
-      alert(`Error: ${err.response?.data?.error || "Connection failed"}`);
+    } catch (err) {
+      const axiosError = err as AxiosError<{ error: string }>;
+      toast.error(
+        axiosError.response?.data?.error || "Connection failed. Try again.",
+      );
     }
   };
 
@@ -40,7 +46,7 @@ export default function Contact() {
       >
         <h2 className="text-5xl font-black text-white tracking-tighter italic">
           Let&apos;s{" "}
-          <span className="text-purple-glowow purple-glow">Connect</span>
+          <span className="text-purple-500 purple-glow">Connect</span>
         </h2>
         <p className="text-slate-400 leading-relaxed text-lg">
           Building high-performance systems requires a bridge between ideas and
@@ -62,7 +68,11 @@ export default function Contact() {
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
+            <label htmlFor="name" className="sr-only">
+              Full Name
+            </label>
             <input
+              id="name"
               {...register("name", { required: "Name is required" })}
               placeholder="Full Name"
               className={`bg-dark-bg/50 border ${errors.name ? "border-pink-500" : "border-white/10"} p-4 rounded-2xl outline-none focus:border-[#006466] text-white w-full transition-all`}
@@ -71,10 +81,17 @@ export default function Contact() {
           </div>
 
           <div className="space-y-2">
+            <label htmlFor="email" className="sr-only">
+              Email Address
+            </label>
             <input
+              id="email"
               {...register("email", {
                 required: "Email is required",
-                pattern: { value: /^\S+@\S+$/i, message: "Invalid email" },
+                pattern: {
+                  value: /^\S+@\S+\.\S+$/i,
+                  message: "Invalid email",
+                },
               })}
               placeholder="Email Address"
               className={`bg-dark-bg/50 border ${errors.email ? "border-pink-500" : "border-white/10"} p-4 rounded-2xl outline-none focus:border-[#006466] text-white w-full transition-all`}
@@ -84,7 +101,11 @@ export default function Contact() {
         </div>
 
         <div className="space-y-2">
+          <label htmlFor="message" className="sr-only">
+            Project details
+          </label>
           <textarea
+            id="message"
             {...register("message", { required: "Message is required" })}
             placeholder="Project details..."
             rows={5}
@@ -94,7 +115,9 @@ export default function Contact() {
         </div>
 
         <button
+          type="submit"
           disabled={isSubmitting}
+          aria-label={isSubmitting ? "Sending message" : "Send message"}
           className="relative w-full py-5 bg-[#006466] hover:bg-[#00b4d8] text-white font-black rounded-2xl transition-all disabled:opacity-50 uppercase tracking-widest text-sm shadow-lg shadow-[#006466]/20 flex items-center justify-center gap-2"
         >
           {isSubmitting ? (
@@ -117,6 +140,7 @@ function ErrorMessage({ message }: { message?: string }) {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
+          role="alert"
           className="text-pink-400 text-xs font-bold pl-2"
         >
           {message}
@@ -126,7 +150,7 @@ function ErrorMessage({ message }: { message?: string }) {
   );
 }
 
-function ContactDetail({ Icon, label }: { Icon: any; label: string }) {
+function ContactDetail({ Icon, label }: { Icon: LucideIcon; label: string }) {
   return (
     <div className="flex items-center gap-4 text-slate-300 group">
       <div className="w-12 h-12 rounded-2xl bg-[#006466]/20 flex items-center justify-center text-[#006466] group-hover:bg-[#006466] group-hover:text-white transition-all border border-[#006466]/20">

@@ -1,14 +1,14 @@
-import Navbar from "./components/Layout/navbar";
+import Navbar from "./components/Layout/Navbar";
 import Landing from "./components/ui/Landing";
-import TechStack from "./components/ui/about";
-import Projects from "./components/ui/projects";
-import Services from "./components/ui/services";
-import Contact from "./components/ui/contact";
-// import Footer from "./components/Layout/Footer";
+import TechStack from "./components/ui/About";
+import Projects from "./components/ui/Projects";
+import Services from "./components/ui/Services";
+import Stats from "./components/ui/Stats";
+import Contact from "./components/ui/Contact";
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden ">
+    <div className="relative min-h-screen w-full overflow-x-hidden">
       <Navbar />
 
       <main>
@@ -22,6 +22,8 @@ export default function Home() {
             <TechStack />
           </div>
         </section>
+
+        <Stats />
 
         <section id="Projects" className="py-32 px-6">
           <div className="max-w-6xl mx-auto space-y-16 text-center">
@@ -44,7 +46,6 @@ export default function Home() {
         <section id="Contact" className="py-32 px-6">
           <Contact />
         </section>
-        {/* <Footer /> */}
       </main>
     </div>
   );

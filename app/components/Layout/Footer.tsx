@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+
 import { Github, Linkedin, ArrowUp, Copy, Instagram } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { toast } from "react-toastify";
 
 export default function Footer() {
@@ -13,8 +14,7 @@ export default function Footer() {
         icon: <Copy size={16} className="text-emerald-500" />,
         toastId: "copy-phone",
       });
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
+    } catch {
       toast.error("Failed to copy.");
     }
   };
@@ -24,7 +24,6 @@ export default function Footer() {
   return (
     <footer className="border-t border-white/5 bg-dark-bg py-12 mt-20">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-        {/* Contact Section */}
         <div className="space-y-2 text-center md:text-left">
           <p className="text-white font-black italic tracking-tighter text-xl">
             AMIR<span className="text-emerald-500">MATIN</span>
@@ -32,6 +31,7 @@ export default function Footer() {
 
           <button
             onClick={copyToClipboard}
+            aria-label={`Copy phone number ${phoneNumber}`}
             className="group flex items-center gap-2 text-slate-400 hover:text-emerald-400 transition-colors text-xs tracking-widest uppercase focus:outline-none"
           >
             call me {phoneNumber}
@@ -44,16 +44,16 @@ export default function Footer() {
 
         <div className="flex gap-6">
           <SocialLink
-            label="github"
+            label="GitHub profile"
             href="http://github.com/amirmatinjamshidi-rgb/"
             Icon={Github}
           />
           <SocialLink
-            label="linkedin"
+            label="LinkedIn profile"
             href="https://www.linkedin.com/in/matin-jamshidy"
             Icon={Linkedin}
           />
-          <SocialLink label="instagram" href="#" Icon={Instagram} />
+          <SocialLink label="Instagram profile" href="#" Icon={Instagram} />
         </div>
 
         <button
@@ -78,7 +78,7 @@ function SocialLink({
   label,
 }: {
   href: string;
-  Icon: any;
+  Icon: LucideIcon;
   label: string;
 }) {
   return (

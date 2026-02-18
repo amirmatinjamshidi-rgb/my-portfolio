@@ -1,9 +1,23 @@
 "use client";
+
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Github, ExternalLink } from "lucide-react";
 
-const projects = [
+interface Project {
+  id: number;
+  title: string;
+  desc: string;
+  tech: string[];
+  link: string;
+  github: string;
+  image: string;
+  color: string;
+  look?: string;
+}
+
+const projects: Project[] = [
   {
     id: 1,
     title: "Shop Now",
@@ -87,7 +101,8 @@ const projects = [
   {
     id: 6,
     title: "Portfolio",
-    desc: "simple portfolio with all 100 lighthouse score, also provided with custom effects(You're here btw).",
+    look: "(You're here btw)",
+    desc: "Simple portfolio with all 100 lighthouse score, also provided with custom effects.",
     tech: [
       "Next.js",
       "TypeScript",
@@ -104,11 +119,67 @@ const projects = [
   },
 ];
 
+function ProjectImage({ src, alt }: { src: string; alt: string }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  return (
+    <div className="relative h-64 w-full overflow-hidden">
+      <div className="absolute inset-0 bg-dark-bg/40 z-10 group-hover:bg-transparent transition-colors duration-500" />
+
+      {!isLoaded && (
+        <div className="absolute inset-0 bg-[#1b3a4b]/30 animate-pulse z-[5]">
+          <div className="h-full w-full flex items-center justify-center">
+            <div className="w-10 h-10 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
+          </div>
+        </div>
+      )}
+
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        className={`object-cover transform group-hover:scale-105 transition-all duration-700 ${isLoaded ? "opacity-100" : "opacity-0"
+          }`}
+        onLoad={() => setIsLoaded(true)}
+      />
+    </div>
+  );
+}
+
+function ProjectLink({
+  href,
+  children,
+  label,
+  className,
+}: {
+  href: string;
+  children: React.ReactNode;
+  label: string;
+  className: string;
+}) {
+  const isExternal = href !== "#" && href.startsWith("http");
+
+  return (
+    <a
+      href={href}
+      aria-label={label}
+      className={className}
+      {...(isExternal && {
+        target: "_blank",
+        rel: "noopener noreferrer",
+      })}
+    >
+      {children}
+    </a>
+  );
+}
+
 export default function Projects() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10 max-w-6xl mx-auto">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto">
       {projects.map((project, index) => (
-        <motion.div
+        <motion.article
           key={project.id}
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -116,15 +187,7 @@ export default function Projects() {
           viewport={{ once: true }}
           className={`group relative rounded-[2.5rem] bg-[#1b3a4b]/10 border border-white/5 overflow-hidden hover:bg-[#1b3a4b]/20 transition-all duration-500 shadow-2xl ${project.color}`}
         >
-          <div className="relative h-64 w-full overflow-hidden">
-            <div className="absolute inset-0 bg-dark-bg/40 z-10 group-hover:bg-transparent transition-colors duration-500" />
-            <Image
-              src={project.image}
-              alt={project.title}
-              fill
-              className="object-cover transform group-hover:scale-105 transition-transform duration-700"
-            />
-          </div>
+          <ProjectImage src={project.image} alt={project.title} />
 
           <div className="p-8 space-y-4">
             <div className="flex justify-between items-start">
@@ -132,23 +195,30 @@ export default function Projects() {
                 {project.title}
               </h3>
               <div className="flex gap-4">
-                <a
+                <ProjectLink
                   href={project.github}
+                  label={`${project.title} GitHub repository`}
                   className="text-slate-400 hover:text-white transition-colors"
                 >
                   <Github size={20} />
-                </a>
-                <a
+                </ProjectLink>
+                <ProjectLink
                   href={project.link}
+                  label={`${project.title} live demo`}
                   className="text-slate-400 hover:text-emerald-400 transition-colors"
                 >
                   <ExternalLink size={20} />
-                </a>
+                </ProjectLink>
               </div>
             </div>
 
             <p className="text-slate-400 text-sm leading-relaxed min-h-12">
-              {project.desc}
+              {project.desc}{" "}
+              {project.look && (
+                <code className="text-emerald-400 animate-pulse">
+                  {project.look}
+                </code>
+              )}
             </p>
 
             <div className="flex flex-wrap gap-2 pt-2">
@@ -162,7 +232,7 @@ export default function Projects() {
               ))}
             </div>
           </div>
-        </motion.div>
+        </motion.article>
       ))}
     </div>
   );

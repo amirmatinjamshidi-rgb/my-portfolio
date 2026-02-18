@@ -1,16 +1,27 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { motion, useSpring, AnimatePresence } from "framer-motion";
 
 export default function CustomCursor() {
-  // const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isPointer, setIsPointer] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
 
   const cursorX = useSpring(0, { damping: 25, stiffness: 300 });
   const cursorY = useSpring(0, { damping: 25, stiffness: 300 });
 
   useEffect(() => {
+    setHasMounted(true);
+    const isTouch =
+      "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    setIsTouchDevice(isTouch);
+
+    if (isTouch) return;
+
+    document.documentElement.classList.add("custom-cursor-active");
+
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX - 16);
       cursorY.set(e.clientY - 16);
@@ -19,12 +30,13 @@ export default function CustomCursor() {
     const handleMouseDown = () => setIsClicked(true);
     const handleMouseUp = () => setIsClicked(false);
 
-    const checkPointer = () => {
-      const hoveredEl = document.querySelector(":hover");
-      const cursorType = window.getComputedStyle(
-        hoveredEl || document.body,
-      ).cursor;
-      setIsPointer(cursorType === "pointer");
+    const checkPointer = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      const computed = window.getComputedStyle(target).cursor;
+      setIsPointer(
+        computed === "pointer" || target.closest("a, button") !== null,
+      );
     };
 
     window.addEventListener("mousemove", moveCursor);
@@ -33,6 +45,7 @@ export default function CustomCursor() {
     window.addEventListener("mouseover", checkPointer);
 
     return () => {
+      document.documentElement.classList.remove("custom-cursor-active");
       window.removeEventListener("mousemove", moveCursor);
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
@@ -40,8 +53,13 @@ export default function CustomCursor() {
     };
   }, [cursorX, cursorY]);
 
+  if (!hasMounted || isTouchDevice) return null;
+
   return (
-    <div className="fixed inset-0 pointer-events-none ">
+    <div
+      className="fixed inset-0 pointer-events-none z-[9999]"
+      aria-hidden="true"
+    >
       <motion.div
         style={{ x: cursorX, y: cursorY }}
         className="relative w-8 h-8 flex items-center justify-center"

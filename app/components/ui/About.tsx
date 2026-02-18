@@ -43,7 +43,7 @@ export default function TechStack() {
         >
           <div className="relative bg-[#1b3a4b]/90 backdrop-blur-xl p-8 rounded-[1.4rem] h-full space-y-6">
             <h3
-              className={`text-xs font-black uppercase tracking-[0.4em] bg-clip-text bg-linear-to-r ${group.gradient}`}
+              className={`text-xs font-black uppercase tracking-[0.4em] text-transparent bg-clip-text bg-linear-to-r ${group.gradient}`}
             >
               {group.category}
             </h3>

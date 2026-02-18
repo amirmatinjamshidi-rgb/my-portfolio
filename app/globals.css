@@ -16,13 +16,21 @@
 /* 1. Global Resets & Performance */
 @layer base {
   * {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
-    cursor: none !important; /* Hide system cursor globally */
+    scrollbar-width: thin; /* Firefox — thin but visible for accessibility */
+    scrollbar-color: rgba(16, 185, 129, 0.3) transparent;
   }
 
   *::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
+    width: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: rgba(16, 185, 129, 0.3);
+    border-radius: 3px;
   }
 
   body {
@@ -33,11 +41,9 @@
     overflow-x: hidden;
   }
 
-  a,
-  button,
-  input,
-  textarea,
-  [role="button"] {
+  /* Only hide system cursor on devices that have a mouse (non-touch) */
+  .custom-cursor-active,
+  .custom-cursor-active * {
     cursor: none !important;
   }
 }
@@ -106,4 +112,20 @@
 
 .green-glow {
   text-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+}
+
+/* Typing cursor blink */
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-blink {
+  animation: blink 0.8s step-end infinite;
 }
