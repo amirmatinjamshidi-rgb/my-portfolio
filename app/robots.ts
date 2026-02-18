@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://amirmatinjamshidi.vercel.app/sitemap.xml",
+    sitemap: "https://my-portfolio-azure-xi.vercel.app/",
   };
 }

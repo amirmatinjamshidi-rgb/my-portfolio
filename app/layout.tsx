@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const SITE_URL = "https://amirmatinjamshidi.vercel.app";
+const SITE_URL = "https://my-portfolio-azure-xi.vercel.app/";
 
 export const metadata: Metadata = {
   title: {
